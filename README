@@ -1,0 +1,82 @@
+= Installation
+Just copy file to your app/controller/components
+
+= Use
+create an attribute "files" in your controller like this.
+
+var $files = array(
+	"image" => array(
+		"origin" => array("type" => "move", "width" => 900, "height"=>700)
+	),
+);
+
+image   => name of the filed that you create in your view
+origin  => name of file that you will create
+type    => (move, fixed, resize, crop) how the plugin need process this file
+width   => width for file used in fixed, resize or crop
+height  => height for file used in fixed, resize or crop
+
+= Structure of files
+When you upload a file this plugin will create this structure in you webroot folder:
+
+webroot               // default
+--files               // you need create and add permission to write
+----users             // name of the controllers that you use this plugin (Upload will create this folder)
+------1              // id of folder of this register
+--------0             // first image that you create (first level of the file attribute)
+----------origin.jpg  // name of file and extension
+
+= Real example
+
+<?php
+
+class ProductsController extends AppController
+{
+	var $name = 'Products';
+	var $components = array('Upload');
+	var $files = array(
+		"image_main" => array(
+			"origin" => array("type" => "move"),
+			"big" => array("type" => "resize", "width" => 900, "height"=>700),
+			"image" => array("type" => "fixed", "width" => 273, "height"=>365),
+			"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
+			"small" => array("type" => "crop", "width"=>73, "height"=>97)
+		),
+		"image_1" => array(
+			"origin" => array("type" => "move"),
+			"big" => array("type" => "resize", "width" => 900, "height"=>700),
+			"image" => array("type" => "fixed", "width" => 273, "height"=>365),
+			"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
+			"small" => array("type" => "crop", "width"=>73, "height"=>97)
+		),
+		"image_2" => array(
+			"origin" => array("type" => "move"),
+			"big" => array("type" => "resize", "width" => 900, "height"=>700),
+			"image" => array("type" => "fixed", "width" => 273, "height"=>365),
+			"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
+			"small" => array("type" => "crop", "width"=>73, "height"=>97)
+		)
+	);
+
+	function admin_add()
+	{
+		if (!empty($this->data))
+		{
+			$this->Product->create();
+			if ($this->Product->save($this->data))
+			{
+				$this->data["Product"]["id"] = $this->Product->getLastInsertID();
+				$this->Upload->upload();
+				
+				$this->Session->setFlash(__('The Product has been saved', true));
+				$this->redirect(array("action"=>"index"));
+			}
+			else
+			{
+				$this->Session->setFlash(__("The Product could not be saved. Please, try again.", true));
+			}
+		}
+	}
+	
+}
+?>
