@@ -1,0 +1,97 @@
+# Cake Upload
+
+The Cake Upload is a component created to facilitate the uploading of files in projects that use CakePHP.
+
+## Installation
+
+### Component
+
+To install the component you need execute on /app/controller/components/:
+
+	git clone git@github.com:marciotrindade/cake_upload.git 
+
+### Using
+
+create an attribute `$files` in your controller like this.
+
+	var $files = array(
+		"name_of_filed" => array(
+			"new_name_of_file" => array($options)
+		)
+	);
+
+### Options
+
+	type    => (move, fixed, resize or crop) how the plugin will process this file.
+	ext     => you can set how is the extension of file that you will create. Default is "jpg".
+	name    => you can set how is the name of file that you will create. Default is the key that you use on array (new_name_of_file).
+	mime    => you can set how is the mime type of file that you will create. Default is "image/jpeg".
+	width   => if you upload a image you can set a width to methods: fixed, resize or crop.
+	height  => if you upload a image you can set a height to methods: fixed, resize or crop.
+	quality => if you upload a image and choose "image/jpeg" to mime type you can set a quality your image.
+
+### Structure of folthers
+
+When you upload a file this plugin will create this structure in you webroot folder:
+
+	webroot               # default in CakePHP
+	--files               # you need create and add permission to write
+	----users             # name of the controllers that you use this plugin (Upload will create this folder)
+	------1               # the id of this record
+	--------0             # if you use sequential names this is level of file else this use same name of field (because you can upload more then one file of record)
+	----------origin.jpg  # name and extensio of file
+
+### Example
+
+	<?php
+
+	class ProductsController extends AppController
+	{
+		var $name = 'Products';
+		var $components = array('Upload');
+		var $files = array(
+			"image_main" => array(
+				"origin" => array("type" => "move"),
+				"big" => array("type" => "resize", "width" => 900, "height"=>700),
+				"image" => array("type" => "fixed", "width" => 273, "height"=>365),
+				"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
+				"small" => array("type" => "crop", "width"=>73, "height"=>97)
+			),
+			"image_1" => array(
+				"origin" => array("type" => "move"),
+				"big" => array("type" => "resize", "width" => 900, "height"=>700),
+				"image" => array("type" => "fixed", "width" => 273, "height"=>365),
+				"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
+				"small" => array("type" => "crop", "width"=>73, "height"=>97)
+			),
+			"image_2" => array(
+				"origin" => array("type" => "move"),
+				"big" => array("type" => "resize", "width" => 900, "height"=>700),
+				"image" => array("type" => "fixed", "width" => 273, "height"=>365),
+				"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
+				"small" => array("type" => "crop", "width"=>73, "height"=>97)
+			)
+		);
+
+		function admin_add()
+		{
+			if (!empty($this->data))
+			{
+				$this->Product->create();
+				if ($this->Product->save($this->data))
+				{
+					$this->data["Product"]["id"] = $this->Product->getLastInsertID();
+					$this->Upload->upload();
+
+					$this->Session->setFlash(__('The Product has been saved', true));
+					$this->redirect(array("action"=>"index"));
+				}
+				else
+				{
+					$this->Session->setFlash(__("The Product could not be saved. Please, try again.", true));
+				}
+			}
+		}
+
+	}
+	?>
