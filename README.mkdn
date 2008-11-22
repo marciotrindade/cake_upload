@@ -8,7 +8,8 @@ The Cake Upload is a component created to facilitate the uploading of files in p
 
 To install the component you need execute on /app/controller/components/:
 
-	git clone git@github.com:marciotrindade/cake_upload.git 
+	git clone git@github.com:marciotrindade/cake_upload.git
+	mv cake_upload/* .
 
 ### Using
 
@@ -34,12 +35,14 @@ create an attribute `$files` in your controller like this.
 
 When you upload a file this plugin will create this structure in you webroot folder:
 
-	webroot               # default in CakePHP
-	--files               # you need create and add permission to write
-	----users             # name of the controllers that you use this plugin (Upload will create this folder)
-	------1               # the id of this record
-	--------0             # if you use sequential names this is level of file else this use same name of field (because you can upload more then one file of record)
-	----------origin.jpg  # name and extensio of file
+	files/                       # folther to put uploaded files created by CakePHP
+	`-- pages                    # name of controller created by component
+	    `-- 3                    # id of record created by component
+	        `-- 0                # sequencial of files created by component (you can upload more than one file per record ex. press.pdf, example.doc and image.jpg)
+	            |-- big.jpg      # name and extension of file
+	            |-- image.jpg    # name and extension of file
+	            |-- origin.jpg   # name and extension of file
+	            `-- thumb.jpg    # name and extension of file
 
 ### Example
 
@@ -50,12 +53,11 @@ When you upload a file this plugin will create this structure in you webroot fol
 		var $name = 'Products';
 		var $components = array('Upload');
 		var $files = array(
-			"image_main" => array(
+			"image_0" => array(
 				"origin" => array("type" => "move"),
 				"big" => array("type" => "resize", "width" => 900, "height"=>700),
 				"image" => array("type" => "fixed", "width" => 273, "height"=>365),
 				"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
-				"small" => array("type" => "crop", "width"=>73, "height"=>97)
 			),
 			"image_1" => array(
 				"origin" => array("type" => "move"),
