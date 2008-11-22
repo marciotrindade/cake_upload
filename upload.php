@@ -11,8 +11,7 @@ class UploadComponent extends Object
 {
 	var $sub_dir_is_sequencial = true;
 	
-	
-	
+
 	function startup(&$controller)
 	{
 		$this->controller =& $controller;
@@ -40,7 +39,7 @@ class UploadComponent extends Object
 		foreach ($this->controller->files as $field => $files)
 		{
 			$i++;
-			if ($sub_dir_is_sequencial)
+			if ($this->sub_dir_is_sequencial)
 			{
 				$dir = "{$root_dir}/{$i}";
 			}
@@ -60,7 +59,7 @@ class UploadComponent extends Object
 			{
 				foreach ($files as $name => $options)
 				{
-					$options = am(array("ext" => "jpg", "name" => $name, "mime" => "image/jpeg", "quality" => 90), $options);
+					$options = am(array("ext" => "jpg", "name" => $name, "mime" => "image/jpeg", "quality" => 90, "type" => "move"), $options);
 					$options["file_name"] = "{$dir}/{$options["name"]}.{$options["ext"]}";
 					$function = "{$options["type"]}_file";
 					$this->$function($field["tmp_name"], $options);
@@ -148,6 +147,18 @@ class UploadComponent extends Object
 
 	function move_file($file, $options)
 	{
+		@copy($file, $options["file_name"]);
+		@chmod($options["file_name"], 0777);
+	}
+
+	function get_image()
+	{
+		if (!isSet($this->Image))
+		{
+			APP::import('component', 'Image');
+			$this->Image = new ImageComponent();
+		}
+	}
 
 }
 ?>
