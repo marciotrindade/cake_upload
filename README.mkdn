@@ -31,11 +31,11 @@ create an attribute `$files` in your controller like this.
 	height  => if you upload a image you can set a height to methods: fixed, resize or crop.
 	quality => if you upload a image and choose "image/jpeg" to mime type you can set a quality your image.
 
-### Structure of folthers
+### Structure of folders
 
 When you upload a file this plugin will create this structure in you webroot folder:
 
-	files/                       # folther to put uploaded files created by CakePHP
+	files/                       # folder to put uploaded files created by CakePHP
 	`-- pages                    # name of controller created by component
 	    `-- 3                    # id of record created by component
 	        `-- 0                # sequencial of files created by component (you can upload more than one file per record ex. press.pdf, example.doc and image.jpg)
@@ -64,14 +64,12 @@ When you upload a file this plugin will create this structure in you webroot fol
 				"big" => array("type" => "resize", "width" => 900, "height"=>700),
 				"image" => array("type" => "fixed", "width" => 273, "height"=>365),
 				"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
-				"small" => array("type" => "crop", "width"=>73, "height"=>97)
 			),
 			"image_2" => array(
 				"origin" => array("type" => "move"),
 				"big" => array("type" => "resize", "width" => 900, "height"=>700),
 				"image" => array("type" => "fixed", "width" => 273, "height"=>365),
 				"thumb" => array("type" => "crop", "width"=>126, "height"=>157),
-				"small" => array("type" => "crop", "width"=>73, "height"=>97)
 			)
 		);
 
