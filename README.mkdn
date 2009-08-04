@@ -6,11 +6,14 @@ The Cake Upload is a component created to facilitate the uploading of files in p
 
 ### Component
 
-To install the component you need execute on /app/controller/components/:
+To install the component you need execute :
 
-	git clone git@github.com:marciotrindade/cake_upload.git
-	mv cake_upload/* .
-
+	git submodule add git@github.com:marciotrindade/cake_upload.git plugins/cake_upload
+	git submodule init
+	git submodule update
+	
+or download the zip and extract it in your plugins directory
+	
 ### Using
 
 create an attribute `$files` in your controller like this.
